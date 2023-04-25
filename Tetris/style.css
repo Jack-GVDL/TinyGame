@@ -1,0 +1,16 @@
+#canvas {
+    width: 200px;
+    height: 400px;
+    /*outline: 1px solid red;*/
+}
+
+#container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    background-color: #605B56;
+}
