@@ -34,6 +34,7 @@ function getSquaredDistance(entity1, entity2) {
 }
 
 function recalculateVelocity(context, entity) {
+  // between entities
   for (const e of context.entities) {
     if (e === entity) continue;
 
@@ -45,12 +46,8 @@ function recalculateVelocity(context, entity) {
     entity.velocity[0] += 100 * (disX / scale) / distance;
     entity.velocity[1] += 100 * (disY / scale) / distance;
   }
-}
 
-function recalculateEntity(context, entity) {
-  // velocity
-  recalculateVelocity(context, entity);
-
+  // between entity and origin
   const distance = getSquaredDistance(context.origin, entity);
   const disX = context.origin.position[0] - entity.position[0];
   const disY = context.origin.position[1] - entity.position[1];
@@ -58,8 +55,9 @@ function recalculateEntity(context, entity) {
 
   entity.velocity[0] += 1000 * (disX / scale) / distance;
   entity.velocity[1] += 1000 * (disY / scale) / distance;
+}
 
-  // position
+function recalculatePosition(context, entity) {
   if (entity.tail.length > 30) entity.tail.splice(0, 1);
   entity.tail.push([entity.position[0], entity.position[1]]);
 
@@ -69,7 +67,11 @@ function recalculateEntity(context, entity) {
 
 function recalculate(context) {
   for (const entity of context.entities) {
-    recalculateEntity(context, entity);
+    recalculateVelocity(context, entity);
+  }
+
+  for (const entity of context.entities) {
+    recalculatePosition(context, entity);
   }
 }
 
@@ -111,42 +113,42 @@ function repaint(context) {
 }
 
 function init(context) {
-  // for (let i = 0; i < 20; ++i) {
-  //   const entity = new Entity();
-  //   entity.position[0] = getRandomInt(1200);
-  //   entity.position[1] = getRandomInt(1200);
-  //   entity.velocity[0] = (getRandomInt(100) - 50) / 50;
-  //   entity.velocity[1] = (getRandomInt(100) - 50) / 50;
-  //   context.entities.push(entity);
-  // }
+  for (let i = 0; i < 20; ++i) {
+    const entity = new Entity();
+    entity.position[0] = getRandomInt(1200);
+    entity.position[1] = getRandomInt(1200);
+    entity.velocity[0] = (getRandomInt(100) - 50) / 50;
+    entity.velocity[1] = (getRandomInt(100) - 50) / 50;
+    context.entities.push(entity);
+  }
 
-  const entity1 = new Entity();
-  entity1.position[0] = 300;
-  entity1.position[1] = 600;
-  entity1.velocity[0] = 0;
-  entity1.velocity[1] = 1.5;
-  context.entities.push(entity1);
-
-  const entity2 = new Entity();
-  entity2.position[0] = 900;
-  entity2.position[1] = 600;
-  entity2.velocity[0] = 0;
-  entity2.velocity[1] = -1.5;
-  context.entities.push(entity2);
-
-  const entity3 = new Entity();
-  entity3.position[0] = 600;
-  entity3.position[1] = 300;
-  entity3.velocity[0] = -1.5;
-  entity3.velocity[1] = 0;
-  context.entities.push(entity3);
-
-  const entity4 = new Entity();
-  entity4.position[0] = 600;
-  entity4.position[1] = 900;
-  entity4.velocity[0] = 1.5;
-  entity4.velocity[1] = 0;
-  context.entities.push(entity4);
+  // const entity1 = new Entity();
+  // entity1.position[0] = 300;
+  // entity1.position[1] = 600;
+  // entity1.velocity[0] = 0;
+  // entity1.velocity[1] = 1.5;
+  // context.entities.push(entity1);
+  //
+  // const entity2 = new Entity();
+  // entity2.position[0] = 900;
+  // entity2.position[1] = 600;
+  // entity2.velocity[0] = 0;
+  // entity2.velocity[1] = -1.5;
+  // context.entities.push(entity2);
+  //
+  // const entity3 = new Entity();
+  // entity3.position[0] = 600;
+  // entity3.position[1] = 300;
+  // entity3.velocity[0] = -1.5;
+  // entity3.velocity[1] = 0;
+  // context.entities.push(entity3);
+  //
+  // const entity4 = new Entity();
+  // entity4.position[0] = 600;
+  // entity4.position[1] = 900;
+  // entity4.velocity[0] = 1.5;
+  // entity4.velocity[1] = 0;
+  // context.entities.push(entity4);
 
   context.origin = new Entity();
   context.origin.position[0] = 600;
